@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "313444398835",
+    "firebase_url": "https://messages-app-8c072-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "messages-app-8c072",
     "storage_bucket": "messages-app-8c072.firebasestorage.app"
   },
