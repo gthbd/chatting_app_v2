@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">chatting app v2</string>
+    <string name="chat_channel_id" translatable="false">chat_messages</string>
 </resources>

@@ -30,6 +30,7 @@ fun LoginScreen(viewModel: AuthViewModel) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var email by rememberSaveable { mutableStateOf("") }
     // remember thay vì rememberSaveable để mật khẩu không bị ghi vào saved state
+    // -> khi người dùng nhập sai mật khẩu chỉ có mật khẩu bị xoá, email giữ nguyên
     var password by remember { mutableStateOf("") }
 
     Column(

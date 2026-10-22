@@ -18,6 +18,7 @@ data class Message(
 )
 
 class ChatRepository(
+    //kết nối tới rt-db
     database: FirebaseDatabase = FirebaseDatabase.getInstance(),
 ) {
     private val chatsRef = database.getReference("chats")
