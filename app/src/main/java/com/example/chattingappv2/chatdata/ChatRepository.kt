@@ -24,9 +24,11 @@ class ChatRepository(
     private val chatsRef = database.getReference("chats")
     private val messagesRef = database.getReference("messages")
 
+    //tạo id phòng chat
     fun chatIdOf(uidA: String, uidB: String): String =
         listOf(uidA, uidB).sorted().joinToString("_")
 
+    //tạo phòng chat
     suspend fun createChat(myUid: String, otherUid: String): String {
         require(myUid != otherUid) { "Cannot chat with yourself" }
 
@@ -51,6 +53,7 @@ class ChatRepository(
             .await()
     }
 
+    //lấy tin nhắn
     fun observeMessages(chatId: String): Flow<List<Message>> = callbackFlow {
         val messages = mutableListOf<Message>()
         val query = messagesRef.child(chatId).orderByKey().limitToLast(PAGE_SIZE)

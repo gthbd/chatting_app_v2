@@ -67,13 +67,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    val nav_version = "2.10.2"
+    val nav3_version = "1.2.0"
+    val lifecycle_nav3_version = "2.11.0"
 
-    // Jetpack Compose integration
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    // Navigation 3 libraries
+    implementation("androidx.navigation3:navigation3-runtime:$nav3_version")
+    implementation("androidx.navigation3:navigation3-ui:$nav3_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:$lifecycle_nav3_version")
 
     // JSON serialization library, works with the Kotlin serialization plugin
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")

@@ -1,9 +1,7 @@
 package com.example.chattingappv2.auth
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chattingappv2.notification.PushTokenRepository
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -15,16 +13,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.coroutines.cancellation.CancellationException
 
 data class AuthUiState(val isLoading: Boolean = false, val error: String? = null)
 
 class AuthViewModel(
     private val repository: AuthRepository = AuthRepository(),
-    private val pushTokens: PushTokenRepository = PushTokenRepository(),
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -40,34 +35,7 @@ class AuthViewModel(
 
     fun signUp(email: String, password: String) = submit(email, password, repository::signUp)
 
-    init {
-        viewModelScope.launch {
-            // Token có thể đã đổi lúc app không chạy, nên đồng bộ ở mỗi lần đăng nhập và mỗi lần mở app
-            repository.currentUser.filterNotNull().collect { user ->
-                bestEffort { pushTokens.register(user.uid) }
-            }
-        }
-    }
-
-    fun signOut() {
-        viewModelScope.launch {
-            repository.currentUserNow?.let { user ->
-                // Phải xóa lúc còn đăng nhập, vì rules chỉ cho chủ tài khoản xóa token của mình
-                bestEffort { pushTokens.unregister(user.uid) }
-            }
-            repository.signOut()
-        }
-    }
-    // Lỗi token không được chặn đăng nhập hay đăng xuất nên chỉ ghi log
-    private suspend fun bestEffort(action: suspend () -> Unit) {
-        try {
-            action()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Log.w("AuthViewModel", "Push token sync failed", e)
-        }
-    }
+    fun signOut() = repository.signOut()
 
     private fun submit(
         email: String,
